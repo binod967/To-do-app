@@ -2,7 +2,15 @@
 <form method="post">
     {% csrf_token %}
     <input type="text" name="title" placeholder="Task title" required><br>
-    <input type="text" name="category" placeholder="Category"><br>
+    <!-- <input type="text" name="category" placeholder="Category"><br> -->
+   
+    <select name="category">
+        <option>work</option>
+        <option>personal</option>
+        <option>study</option>
+        <option>others</option>
+    </select><br>
+   
     <select name="priority">
         <option>Low</option>
         <option>Medium</option>
