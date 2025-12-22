@@ -1,34 +1,88 @@
 {% extends 'base.html' %}
-
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>My Tasks</h2>
+<div class="container mt-4">
 
-<p>
-    Pending: {{ pending_count }} |
-    Completed: {{ completed_count }}
-</p>
+    <!-- Search + Filter -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-6">
+            <input
+                type="text"
+                name="q"
+                value="{{ query }}"
+                class="form-control"
+                placeholder="Search tasks..."
+            >
+        </div>
 
-<h3>Pending Tasks</h3>
-<ul>
-{% for task in pending_tasks %}
-    <li>
-        {{ task.title }} ({{ task.priority }})
-        <a href="{% url 'toggle-status' task.id %}">✔</a>
-        <a href="{% url 'delete-task' task.id %}">❌</a>
-    </li>
-{% empty %}
-    <li>No pending tasks</li>
-{% endfor %}
-</ul>
+        <div class="col-md-4">
+            <select name="priority" class="form-select">
+                <option value="">All Priorities</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
 
-<h3>Completed Tasks</h3>
-<ul>
-{% for task in completed_tasks %}
-    <li>{{ task.title }}</li>
-{% empty %}
-    <li>No completed tasks</li>
-{% endfor %}
-</ul>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">Apply</button>
+        </div>
+    </form>
+
+    <!-- Title -->
+    <h2 class="mb-3">My Tasks</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Pending</h5>
+                    <h3>{{ pending_count }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card text-bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Completed</h5>
+                    <h3>{{ completed_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Tasks -->
+    <h4 class="mb-2">Pending Tasks</h4>
+    <ul class="list-group mb-4">
+        {% for task in pending_tasks %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ task.title }}</strong>
+                <span class="badge bg-secondary">{{ task.priority }}</span>
+            </div>
+            <div>
+                <a href="{% url 'toggle-status' task.id %}" class="btn btn-sm btn-success">✔</a>
+                <a href="{% url 'delete-task' task.id %}" class="btn btn-sm btn-danger">❌</a>
+            </div>
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No pending tasks</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Completed Tasks -->
+    <h4 class="mb-2">Completed Tasks</h4>
+    <ul class="list-group">
+        {% for task in completed_tasks %}
+        <li class="list-group-item text-success">
+            ✔ {{ task.title }}
+        </li>
+        {% empty %}
+        <li class="list-group-item text-muted">No completed tasks</li>
+        {% endfor %}
+    </ul>
+
+</div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -18,7 +19,17 @@ def signup(request):
 # Dashboard view
 @login_required
 def dashboard(request):
+    query = request.GET.get('q', '')
+    priority = request.GET.get('priority', '')
+
     tasks = Task.objects.filter(user=request.user)
+
+    if query:
+        tasks = tasks.filter(title__icontains=query)
+
+    if priority:
+        tasks = tasks.filter(priority=priority)
+
     pending = tasks.filter(completed=False)
     completed = tasks.filter(completed=True)
 
@@ -27,6 +38,7 @@ def dashboard(request):
         'completed_tasks': completed,
         'pending_count': pending.count(),
         'completed_count': completed.count(),
+        'query': query,
     })
 
 # Add Task view
@@ -57,3 +69,6 @@ def toggle_status(request, task_id):
     task.completed = not task.completed
     task.save()
     return redirect('dashboard')
+
+
+
