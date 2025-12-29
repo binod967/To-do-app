@@ -1,0 +1,13 @@
+.card.card-pending {
+    background-color:#FFA900 !important;
+    color: white;
+}
+
+.card.card-completed {
+    background-color:#0B5ED7 !important;
+    color: white;
+}
+.field{
+    display: flex;
+    width: 100%;
+}
