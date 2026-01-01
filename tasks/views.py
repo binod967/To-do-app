@@ -3,17 +3,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Task
+from .forms import SignupForm
 
 # Create your views here.
 # Signup view
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = SignupForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 # Dashboard view
